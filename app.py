@@ -13,6 +13,7 @@ from api import get_data
 
 from dotenv import load_dotenv
 import os
+import io
 
 from PyQt6.QtWidgets import QComboBox, QStyledItemDelegate
 from PyQt6.QtCore import Qt
@@ -26,6 +27,7 @@ RANKS = {
     "Silver":       'images/silver.png',
     "Gold":         'images/gold.png',
     "Platinum":     'images/platinum.png',
+    "Emerald":     'images/emerald.png',
     "Diamond":      'images/diamond.png',
     "Master":       'images/master.png',
     "Grandmaster":   'images/grandmaster.png',
@@ -65,20 +67,33 @@ def save_data(users, file_path):
 
 def create_rounded_image(image_path, size, radius):
     """Creates a rounded image with PIL and converts it to QPixmap."""
-    img = Image.open(image_path).convert("RGBA")
-    img = img.resize(size, Image.LANCZOS)
+    try:
+        # Open the image
+        img = Image.open(image_path).convert("RGBA")
+        img = img.resize(size, Image.LANCZOS)
 
-    # Create rounded mask
-    mask = Image.new("L", size, 0)
-    draw = ImageDraw.Draw(mask)
-    draw.rounded_rectangle((0, 0, size[0], size[1]), radius, fill=255)
+        # Create rounded mask
+        mask = Image.new("L", size, 0)
+        draw = ImageDraw.Draw(mask)
+        draw.rounded_rectangle((0, 0, size[0], size[1]), radius, fill=255)
 
-    # Apply rounded mask to image
-    img.putalpha(mask)
+        # Apply rounded mask to image
+        img.putalpha(mask)
 
-    # Convert to QPixmap
-    img.save("images/temp_rounded.png")  # Temporary save for conversion
-    return QPixmap("images/temp_rounded.png")
+        # Convert PIL image to QPixmap using in-memory buffer
+        img_byte_array = io.BytesIO()
+        img.save(img_byte_array, format="PNG")
+        img_byte_array.seek(0)  # Rewind the buffer to the beginning
+
+        # Convert to QPixmap from the byte array
+        pixmap = QPixmap()
+        if not pixmap.loadFromData(img_byte_array.getvalue()):
+            raise ValueError("Failed to load image data into QPixmap.")
+        return pixmap
+
+    except Exception as e:
+        print(f"Error creating rounded image: {e}")
+        return create_rounded_image("images/default.png",size, radius)
 
 
 class AccountButton(QWidget):
@@ -99,19 +114,25 @@ class AccountButton(QWidget):
 
         api_key = os.getenv('riot_api_key')
         if not api_key:
-            raise ValueError("API key not found. Check your .env file.")
+            pass
 
         ranked_info = get_data(self.riot_id, self.tagline, self.region, api_key)
 
         if ranked_info:
-            (rank, self.rank), self.winrate = ranked_info
+            if None not in ranked_info:
+                (rank, self.rank), self.winrate = ranked_info
 
-            rank = rank.capitalize()
-            if rank in RANKS:
-                image_path = RANKS[rank]
+                rank = rank.capitalize()
+                if rank in RANKS:
+                    image_path = RANKS[rank]
+
+                    if not image_path:
+                        image_path = 'images/default.png'
+
 
         # Load rounded image
         self.bg_pixmap = create_rounded_image(image_path, (width, height), radius)
+
 
         # Background Label (Image)
         self.bg_label = QLabel(self)
@@ -162,6 +183,7 @@ class AccountButton(QWidget):
 
         self.button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))  # Set cursor to hand
         self.button.clicked.connect(self.on_click)
+
 
     def enterEvent(self, event):
         """ Change account label color to white on hover """
@@ -427,8 +449,13 @@ class MainApp(QWidget):
         for user in users:
             scroll_layout.addWidget(AccountButton(user, width, height, radius))
 
+
         # Add Create Account button
         for i in range(create_account_count):
+            create_account_widget = CreateAccount(width, height, radius, scroll_area)
+            scroll_layout.addWidget(create_account_widget)
+
+        if create_account_count <= 1:
             create_account_widget = CreateAccount(width, height, radius, scroll_area)
             scroll_layout.addWidget(create_account_widget)
 
@@ -523,4 +550,3 @@ if __name__ == "__main__":
     window = MainApp()
     window.show()
     sys.exit(app.exec())  # Hoiab appi elus ja exitib safeilt
-
