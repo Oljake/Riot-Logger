@@ -16,7 +16,7 @@ import os
 
 from PyQt6.QtWidgets import QComboBox, QStyledItemDelegate
 from PyQt6.QtCore import Qt
-import json
+import pickle
 
 
 # Available ranks
@@ -53,14 +53,14 @@ REGIONS = [
 
 def load_data(file_path):
     try:
-        with open(file_path, "r") as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
+        with open(file_path, "rb") as f:
+            return pickle.load(f)
+    except (FileNotFoundError, pickle.UnpicklingError):
         return []
 
 def save_data(users, file_path):
-    with open(file_path, "w") as f:
-        json.dump(users, f, indent=4)
+    with open(file_path, "wb") as f:
+        pickle.dump(users, f)
 
 
 def create_rounded_image(image_path, size, radius):
@@ -363,7 +363,7 @@ class CreateAccount(QWidget):
 
         users.append({"riot_id": riot_id, "tagline": tagline, "region": region, "username": username, "password": password})
 
-        save_data(users, "users_data.json")
+        save_data(users, "users_data.pickle")
 
         # Get the layout of the parent widget
         parent_layout = self.parent().layout()
@@ -518,7 +518,7 @@ class MainApp(QWidget):
 if __name__ == "__main__":
     # TODO: Edit account (right click onto existing account)
 
-    users = load_data("users_data.json")  # Load the data
+    users = load_data("users_data.pickle")  # Load the data
     app = QApplication(sys.argv)
     window = MainApp()
     window.show()
