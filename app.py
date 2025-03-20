@@ -277,12 +277,12 @@ class CreateAccount(QWidget):
 
         # Confirm & Cancel Buttons (Hidden Initially)
         self.confirm_button = QPushButton("Confirm", self)
-        self.confirm_button.setGeometry(170, 130, 80, 30)
+        self.confirm_button.setGeometry(170, 130, 70, 30)
         self.confirm_button.clicked.connect(self.confirm)
         self.confirm_button.hide()
 
         self.cancel_button = QPushButton("Cancel", self)
-        self.cancel_button.setGeometry(240, 130, 80, 30)
+        self.cancel_button.setGeometry(250, 130, 70, 30)
         self.cancel_button.clicked.connect(self.reset_form)
         self.cancel_button.hide()
 
@@ -349,7 +349,7 @@ class CreateAccount(QWidget):
         password = self.password_entry.text()
         region = self.combo_box.currentText()
 
-        if not riot_id or not username or not password or region == "Region":
+        if not riot_id or tagline == "" or not username or not password or region == "Region":
             print("Please fill all fields!")
             return
 
@@ -523,3 +523,4 @@ if __name__ == "__main__":
     window = MainApp()
     window.show()
     sys.exit(app.exec())  # Hoiab appi elus ja exitib safeilt
+
