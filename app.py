@@ -396,7 +396,7 @@ class MainApp(QWidget):
         self.setWindowTitle("Riot Logger")
         self.setWindowIcon(QIcon(os.path.abspath("images/icon.ico")))
 
-        self.setGeometry(100, 100, 442, 393)  # x, y, w, h
+        self.setGeometry(100, 100, 442, 405)  # x, y, w, h
 
         # Set background color
         self.setStyleSheet("background-color: #242424; color: white;")
