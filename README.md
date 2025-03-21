@@ -1,13 +1,6 @@
 # Riot Logger App
 
-
-
-
-Description:
----------------------------------------
-This application allows users to manage their Riot game account credentials.
-It features a simple UI where users can add, view, and manage their accounts,
-as well as configure the API key used to fetch account information.
+This application allows users to manage their Riot game account credentials through a simple UI. When you launch the app, it automatically opens League of Legends (LoL) and the application interface. In the app, you can input your account details, and the app will generate buttons for each account. By clicking a button, the app logs you into the selected Riot account. The account data is then saved into a file, allowing you to access and manage your information across sessions.
 
 Important Risks and Considerations:
 ---------------------------------------
