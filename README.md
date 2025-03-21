@@ -30,9 +30,7 @@ Main Features:
   and ranks.
   
 - **Change API Key**: Update the API key used for fetching account data.
-  
-- **Resizable Form**: Create and manage accounts in a resizable and intuitive form.
-  
+    
 - **Account Info Display**: Each account displays the account name, winrate, 
   rank, and other details.
 
