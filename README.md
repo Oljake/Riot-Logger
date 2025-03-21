@@ -14,6 +14,9 @@ Important Risks and Considerations:
 - **Non-Existing Accounts**:  
   Querying non-existing accounts will return errors but generally won't result in direct consequences. However, excessive misuse (like repeatedly querying invalid accounts) could lead to restrictions on your API access.
 
+- **CAPTCHA in LoL Client**:  
+  If you frequently use the app or make repeated queries, the **League of Legends client** may ask you to complete a CAPTCHA challenge. This is a security measure to ensure that the activity is coming from a legitimate user and not automated requests.
+
 - **Terms of Service**:  
   Misusing the API (e.g., storing or sharing data improperly) could violate Riot’s terms and result in API access restrictions. Always use the API responsibly to avoid issues.
 
