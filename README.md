@@ -9,6 +9,22 @@ This application allows users to manage their Riot game account credentials.
 It features a simple UI where users can add, view, and manage their accounts,
 as well as configure the API key used to fetch account information.
 
+Important Risks and Considerations:
+---------------------------------------
+
+- **Sensitive Data**:  
+  The `users_data.pickle` file contains sensitive account data (e.g., usernames, passwords). Be careful when sharing this file, as doing so grants others access to your accounts.
+
+- **Rate Limiting**:  
+  Riot enforces rate limits on the API. Excessive requests may result in temporary access throttling or a block on the API, but won’t affect in-game bans.
+
+- **Non-Existing Accounts**:  
+  Querying non-existing accounts will return errors but generally won't result in direct consequences. However, excessive misuse (like repeatedly querying invalid accounts) could lead to restrictions on your API access.
+
+- **Terms of Service**:  
+  Misusing the API (e.g., storing or sharing data improperly) could violate Riot’s terms and result in API access restrictions. Always use the API responsibly to avoid issues.
+
+
 Main Features:
 ---------------------------------------
 - **Add Account**: Easily add a Riot account by providing a Riot ID, Tagline, 
